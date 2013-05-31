@@ -27,3 +27,5 @@ function createMap(){
 function colorPicker(perish){
   return 'grey';
 }
+
+window.onload = createMap
