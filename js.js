@@ -7,7 +7,7 @@ function createMap(){
   var svg = d3.select("#viz").append("svg");
   svg.attr("id", "mainSVG")
     .attr("width", 460)
-    .attr("height", 430)
+    .attr("height", 400)
 
   var perishes = svg.append("g")
     .attr("transform", function(d) { return "scale(5)"})
