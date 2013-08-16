@@ -15,7 +15,6 @@ def scott_data():
 
 scott = scott_data()
 parishes = json.load(open('parishes.json'))
-# counties_parishes = [feature['properties']['COUNTY'] for feature in parishes['features']]
 
 for feature in parishes['features']:
     feature['properties']['impacted_acres'] = scott.get(feature['properties']['COUNTY'], 0)
