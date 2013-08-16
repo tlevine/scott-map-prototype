@@ -14,6 +14,10 @@ def scott_data():
     return {row['parish'].upper().replace('SAINT', 'ST'): row['acreage'] for row in dt.execute(sql)}
 
 scott = scott_data()
-
 parishes = json.load(open('parishes.json'))
-counties_parishes = [feature['properties']['COUNTY'] for feature in parishes['features']]
+# counties_parishes = [feature['properties']['COUNTY'] for feature in parishes['features']]
+
+for feature in parishes['features']:
+    feature['properties']['impacted_acres'] = scott.get(feature['properties']['COUNTY'], 0)
+
+json.dump(parishes, open('impacts.json', 'w'))
