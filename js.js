@@ -21,15 +21,16 @@ function createMap(){
         .data(collection.features)
         .enter().append("path")
         .attr("d", d3.geo.path().projection(xy))
-        .attr("fill", function(parish){ return colorPicker(parish)})
+        .attr("fill", colorPicker)
   });
 
 }
 
 //Figures out the color of the perish
 function colorPicker(parish){
-  console.log(parish.properties.impacted_acres);
-  return parish.properties.acreage;
+  var prop = parish.properties.impacted_acres_prop_max
+  var adj = 1.5
+  return d3.rgb(((1 + prop) * 255)/adj, 255/adj, 255/adj)
 }
 
 window.onload = createMap
