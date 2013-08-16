@@ -16,7 +16,9 @@ def scott_data():
 scott = scott_data()
 parishes = json.load(open('parishes.json'))
 
+max_impacted_acres = max(scott.values())
 for feature in parishes['features']:
     feature['properties']['impacted_acres'] = scott.get(feature['properties']['COUNTY'], 0)
+    feature['properties']['impacted_acres_prop_max'] = scott.get(feature['properties']['COUNTY'], 0) / max_impacted_acres
 
 json.dump(parishes, open('impacts.json', 'w'))

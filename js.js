@@ -21,14 +21,15 @@ function createMap(){
         .data(collection.features)
         .enter().append("path")
         .attr("d", d3.geo.path().projection(xy))
-        .attr("fill", function(perish){ return colorPicker(perish)})
+        .attr("fill", function(parish){ return colorPicker(parish)})
   });
 
 }
 
 //Figures out the color of the perish
-function colorPicker(perish){
-  return 'grey';
+function colorPicker(parish){
+  console.log(parish.properties.impacted_acres);
+  return parish.properties.acreage;
 }
 
 window.onload = createMap
