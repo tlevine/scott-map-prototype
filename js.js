@@ -15,7 +15,7 @@ function createMap(){
       .attr("id", "perishes")
       .attr("transform", function(d) { return "translate(-532, -325)"})
 
-  d3.json("impacts.json", function(collection){
+  d3.json("data/impacts.json", function(collection){
       data = collection;
       perishes.selectAll("path")
         .data(collection.features)
