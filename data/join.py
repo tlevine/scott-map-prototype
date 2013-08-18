@@ -11,14 +11,20 @@ def scott_data():
     GROUP BY "parish";
     '''
 
-    return {row['parish'].upper().replace('SAINT', 'ST'): row['acreage'] for row in dt.execute(sql)}
+    return {row['parish'].upper().replace('SAINT', 'ST'): (row['parish'], row['acreage']) for row in dt.execute(sql)}
 
 scott = scott_data()
 parishes = json.load(open('parishes.json'))
 
-max_impacted_acres = max(scott.values())
+max_impacted_acres = max([v[1] for v in scott.values()])
 for feature in parishes['features']:
-    feature['properties']['impacted_acres'] = scott.get(feature['properties']['COUNTY'], 0)
-    feature['properties']['impacted_acres_prop_max'] = scott.get(feature['properties']['COUNTY'], 0) / max_impacted_acres
+    feature['properties']['impacted_acres'] = scott.get(feature['properties']['COUNTY'], (None, 0))[1]
+    feature['properties']['impacted_acres_prop_max'] = scott.get(feature['properties']['COUNTY'], (None, 0))[1] / max_impacted_acres
+
+    sql = 'SELECT "permitApplicationNumber", "projectDescription" FROM application WHERE parish = ?'
+    if feature['properties']['COUNTY'] in scott:
+        feature['properties']['applications'] = dt.execute(sql, [scott[feature['properties']['COUNTY']][0]])
+    else:
+        feature['properties']['applications'] = []
 
 json.dump(parishes, open('impacts.json', 'w'))
