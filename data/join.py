@@ -22,12 +22,15 @@ for feature in parishes['features']:
     feature['properties']['impacted_acres_prop_max'] = scott.get(feature['properties']['COUNTY'], (None, 0))[1] / max_impacted_acres
 
     sql = '''
-SELECT "permitApplicationNumber", "projectDescription", "acreage"
+SELECT "permitApplicationNumber", "projectDescription", "acreage", "parish"
 FROM application
 WHERE "parish" = ? AND "type" = 'impact'
 '''
     if feature['properties']['COUNTY'] in scott:
-        feature['properties']['applications'] = dt.execute(sql, [scott[feature['properties']['COUNTY']][0]])
+        applications = dt.execute(sql, [scott[feature['properties']['COUNTY']][0]])
+        for a in applications:
+            a['parish'] = a['parish'].upper().replace('SAINT', 'ST')
+        feature['properties']['applications'] = applications
     else:
         feature['properties']['applications'] = []
 
